@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<constant name="struts.devMode" value="true"></constant>
+	
+	
+	<package name="basepackage" extends="struts-default">
+	<interceptors >
+		<interceptor name="login" class="cn.itcast.interceptor.LoginInterceptor">
+			
+		</interceptor>
+		<interceptor-stack name="globeStack">
+			<interceptor-ref name="login">
+				<param name="excludeMethods">login</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+		</interceptor-stack>
+	</interceptors>
+	<default-interceptor-ref name="globeStack"></default-interceptor-ref>
+	</package>
+	
+	
+	<package name="customer" extends="basepackage" namespace="/">
+	
+		<action name="customer_*" class="cn.itcast.action.CustomerAction" method="{1}">
+			<result name="list">/jsp/customer/_list.jsp</result>
+			<result name="add" type="chain">
+				<param name="actionName">customer_list</param>
+				<param name="namespace">/</param>
+			</result>
+			<result name="loginFail">/_login.jsp</result>
+			<result name="edit">/jsp/customer/_edit.jsp</result>
+		</action>
+		
+		<action name="user_*" class="cn.itcast.action.UserAction" method="{1}">
+			<result name="loginSuccess">/index.htm</result>
+			<result name="loginFail">/_login.jsp</result>
+			<result name="logout">/index.htm</result>
+		</action>
+		
+	</package>
+	
+</struts>
